@@ -11,8 +11,6 @@ ny = re.compile('ny', re.IGNORECASE)
 alive = re.compile('(c(ò|o)n|co)(.+)*(s(o|ô|ố)ng)', re.IGNORECASE)
 plstand = re.compile('(bxh|(b(a|ả)ng(.+)*(x(e|ế)p)(.+)*))(.+)*(nha|(ngo(a|ạ)i(.+)*(h(a|ạ)ng)))', re.IGNORECASE)
 anhgai = re.compile('(a|ả)nh(.+)*(g(a|á)i|xinh)', re.IGNORECASE)
-
 old = re.compile('edm', re.IGNORECASE)
-
 game = re.compile('lol|game|gảm|gaming|dst', re.IGNORECASE)
 film = re.compile('phim|film|phỉm', re.IGNORECASE)

@@ -21,11 +21,11 @@ async def on_message(message):
     match_7 = alive.search(message.content)
     match_8 = dog.search(message.content)
     match_9 = plstand.search(message.content)
-
     match_10 = anhgai.search(message.content)
     match_11 = old.search(message.content)
     match_12 = game.search(message.content)
     match_13 = film.search(message.content)
+
     if match:
         await message.channel.send('Xin chào ' + message.author.name + '!\n~ Chúc mọi điều tốt lành sẽ đến với bạn!')
     elif match_2:
@@ -57,9 +57,9 @@ async def on_message(message):
     if match_11:
         await message.channel.send('Bug cũ rồi bro ạ 🙃')
     if match_12:
-        await message.channel.send('@everyone' + ' gảm thôi các người anh em 🤩 📢 ')
+        await message.channel.send('@everyone' + ' gảm thôi các người anh em 🤩 📢')
     if match_13:
-        await message.channel.send('@everyone' + ' phim thôi các người anh em 🤩 📢 ')
+        await message.channel.send('@everyone' + ' phim thôi các người anh em 🤩 📢')
 
 activate()
 client.run('ODc3NTQxMDM1NDkwODIwMTQ4.YR0Hxg.snocV1aD3HJ1a-rWOPUg6w_hiTI')
