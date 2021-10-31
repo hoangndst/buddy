@@ -1,6 +1,6 @@
 import discord
 from api import getCovidMess, getWeatherMess, getCatMess, getDogMess, getStandPL, getGaisImage
-from regex import sayhi, bodyshaming, ny, covid, weather, cat, alive, badWord, dog, plstand, anhgai, old, game, film
+from regex import sayhi, bodyshaming, ny, covid, weather, cat, alive, badWord, dog, plstand, anhgai, old, game, film, learn
 from server import activate
 client = discord.Client()
 @client.event
@@ -25,7 +25,7 @@ async def on_message(message):
     match_11 = old.search(message.content)
     match_12 = game.search(message.content)
     match_13 = film.search(message.content)
-
+    match_14 = learn.search(message.content)
     if match:
         await message.channel.send('Xin chào ' + message.author.name + '!\n~ Chúc mọi điều tốt lành sẽ đến với bạn!')
     elif match_2:
@@ -60,6 +60,7 @@ async def on_message(message):
         await message.channel.send('@everyone' + ' gảm thôi các người anh em 🤩 📢')
     if match_13:
         await message.channel.send('@everyone' + ' phim thôi các người anh em 🤩 📢')
-
+    if match_14:
+        await message.channel.send('Bỏ học gảm thôi các người anh em 🎮 😋')
 activate()
 client.run('ODc3NTQxMDM1NDkwODIwMTQ4.YR0Hxg.snocV1aD3HJ1a-rWOPUg6w_hiTI')
