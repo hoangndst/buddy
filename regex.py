@@ -1,5 +1,5 @@
 import re
-import datetime
+
 sayhi = re.compile('(xin\s(chào|chao)|hi|hello|chào|chao|yo|hey)(.+)*buddy', re.IGNORECASE)
 bodyshaming = re.compile('(b(\W+|\d+)*é(\W+|\d+)*(o|0))|(l(\W+|\d+)*ợ(\W+|\d+)*n)', re.IGNORECASE)
 badWord = re.compile('(([^a-z]+|(^))(d|đ)(\W+)*m)|((đ|d)(i|ị)t)|đĩ', re.IGNORECASE)
@@ -15,8 +15,3 @@ old = re.compile('edm', re.IGNORECASE)
 game = re.compile('lol|game|gảm|gaming|dst', re.IGNORECASE)
 film = re.compile('phim|film|phỉm', re.IGNORECASE)
 learn = re.compile('học', re.IGNORECASE)
-
-now = datetime.datetime.now().strftime("%H:%M")
-print(now)
-if now == "21:03":
-    print("Good night")
