@@ -64,7 +64,7 @@ async def on_message(message):
     if match_14:
         await message.channel.send('Bỏ học gảm thôi các người anh em 🎮 😋')
     if match_15:
-        fun = getFunImage()
-        await message.channel.send(fun)
+        funImg = getFunImage()
+        await message.channel.send(funImg)
 activate()
 client.run('ODc3NTQxMDM1NDkwODIwMTQ4.YR0Hxg.snocV1aD3HJ1a-rWOPUg6w_hiTI')
