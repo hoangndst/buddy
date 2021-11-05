@@ -38,5 +38,7 @@ html {
   }
 }
 
-
+#myHiddenPage { 
+  display: none;
+} 
 
