@@ -68,4 +68,9 @@ def getGaisImage():
 	gaiImage = json.loads(gai.text)
 	gaiMess = gaiImage["image"]
 	return gaiMess
-  
+def getFunImage():
+	url = "https://script.google.com/macros/s/AKfycby5b5EkTkt3cP3FxiHSESrSHVCxw4KZhIhb4y_ZMcWpKZF0ytalwqwAY4bbDEhGzzxk/exec"
+	gai = requests.get(url)
+	gaiImage = json.loads(gai.text)
+	gaiMess = gaiImage["image"]
+	return gaiMess
