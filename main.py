@@ -1,6 +1,6 @@
 import discord
-from api import getCovidMess, getWeatherMess, getCatMess, getDogMess, getStandPL, getGaisImage, getFunImage
-from regex import sayhi, bodyshaming, ny, covid, weather, cat, alive, badWord, dog, plstand, anhgai, old, game, film, learn, fun
+from api import getCovidMess, getWeatherMess, getCatMess, getDogMess, getStandPL, getGaisImage, getFunImage, Addfilm
+from regex import sayhi, bodyshaming, ny, covid, weather, cat, alive, badWord, dog, plstand, anhgai, old, game, film, learn, fun, getAllNumber
 from server import activate
 client = discord.Client()
 @client.event
@@ -28,7 +28,13 @@ async def on_message(message):
     match_14 = learn.search(message.content)
     match_15 = fun.search(message.content)
     if match:
-        await message.channel.send('Xin chào ' + message.author.name + '!\n~ Chúc mọi điều tốt lành sẽ đến với bạn!')
+        content = 'Xin chào ' + message.author.name + '!\n~ Chúc mọi điều tốt lành sẽ đến với bạn!\n'
+        content += 'Buddy Film Extension:\n'
+        content += '`$fView`: Xem số lượng phim đã xem.\n'
+        content += '`$fAdd [Số lượng]`: Thêm hoặc bớt số lượng phim đã xem.\n'
+        content += '`$fFix [Số lượng]`: Sửa số lượng phim đã xem.\n'
+        content += '\nTính năng vẫn đang phát triển các homie đợi nhóe :3!'
+        await message.channel.send(content)
     elif match_2:
         await message.channel.send('ny cc')
     elif match_1:
@@ -58,13 +64,33 @@ async def on_message(message):
     if match_11:
         await message.channel.send('Bug cũ rồi bro ạ 🙃')
     if match_12:
-        await message.channel.send('@everyone' + ' gảm thôi các người anh em 🤩 📢')
+        # await message.channel.send('@everyone' + ' gảm thôi các người anh em 🤩 📢')
+        await message.channel.send('Bỏ gảm đi nghiện quá 😒')
     if match_13:
         await message.channel.send('@everyone' + ' phim thôi các người anh em 🤩 📢')
     if match_14:
-        await message.channel.send('Bỏ học gảm thôi các người anh em 🎮 😋')
+        await message.channel.send('Learn or lủng 😏')
+        # await message.channel.send('Bỏ học gảm thôi các người anh em 🎮 😋')
     if match_15:
         funImg = getFunImage()
         await message.channel.send(funImg)
+    if message.content.startswith('$fAdd'):
+        num = getAllNumber(message.content)
+        if len(num) == 1:
+            msg = Addfilm(1, num[0])
+            await message.channel.send(msg)
+        else:
+            await message.channel.send('Sai cú pháp rồi bro, Buddy đ đủ thông minh để hiểu 😒')
+    if message.content.startswith('$fFix'):
+        num = getAllNumber(message.content)
+        if len(num) == 1:
+            msg = Addfilm(2, num[0])
+            await message.channel.send(msg)
+        else:
+            await message.channel.send('Sai cú pháp rồi bro, Buddy đ đủ thông minh để hiểu 😒')
+    if message.content.startswith('$fView'):
+        msg = Addfilm(3, 0)
+        await message.channel.send(msg)
+
 activate()
 client.run('ODc3NTQxMDM1NDkwODIwMTQ4.YR0Hxg.snocV1aD3HJ1a-rWOPUg6w_hiTI')

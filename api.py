@@ -74,3 +74,9 @@ def getFunImage():
 	gaiImage = json.loads(gai.text)
 	gaiMess = gaiImage["image"]
 	return gaiMess
+def Addfilm(q, filmAdd):
+    url = "https://script.google.com/macros/s/AKfycbzaPYosnQEdoMLlM5KhFq1riyZmCTZS7A_SksOVosygDAwptbhCWg6lLPvynlSfS2DZ/exec?q=" + str(q) + "&filmAdd=" + str(filmAdd)
+    film = requests.get(url)
+    film_data = json.loads(film.text)
+    film_mess = film_data["msg"]
+    return film_mess
