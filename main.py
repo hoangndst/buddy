@@ -9,6 +9,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    print(message.author.id)
     if message.author == client.user:
         return
     match = sayhi.search(message.content)
@@ -59,12 +60,13 @@ async def on_message(message):
         stand_mess = getStandPL()
         await message.channel.send(stand_mess)
     if match_10:
-        if message.author.id == '714137749690646588':
-            await message.channel.send('Anh gai dcm')
+        if message.author.id == "714137749690646588":
+            gaiMess = "co cai lo"
+            await message.channel.send(gaiMess)
         else:
             gaiMess = getGaisImage()
             await message.channel.send(gaiMess)
-    if match_11:
+                 ifatch_11:
         await message.channel.send('Bug cũ rồi bro ạ 🙃')
     if match_12:
         # await message.channel.send('@everyone' + ' gảm thôi các người anh em 🤩 📢')
