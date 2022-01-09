@@ -60,10 +60,11 @@ async def on_message(message):
         await message.channel.send(stand_mess)
     if match_10:
         if message.author.id == 493052410713866240:
-            gaiMess = "Long à, không gảm với ae thì có lờ ảnh gái."
+            await message.channel.send('Kim Da-mi chứ gì Long, đợi tí :))')
+            gaiMess = getGaisImage(4)
             await message.channel.send(gaiMess)
         else:
-            gaiMess = getGaisImage()
+            gaiMess = getGaisImage(1)
             await message.channel.send(gaiMess)
     if match_11:
         await message.channel.send('Bug cũ rồi bro ạ 🙃')

@@ -62,8 +62,8 @@ def getStandPL():
 		standing_mess +='\n' + str(i+1) + ": " +standing_data['standings'][0]['table'][i]['team']['name']
 	return standing_mess
 
-def getGaisImage():
-	url = "https://script.google.com/macros/s/AKfycbyjt-OlSu5pIEoMZcjsIpug95qL4kLAhQbZ1w6xqmSovvK3nAf1ba3vX0T4Ng_wpBrR/exec"
+def getGaisImage(sheetNum):
+	url = "https://script.google.com/macros/s/AKfycbzxzfph_keoKcE7S-DLRd11u6R1yt-JSJYyTzYj552EhUf3pNnF-QX1VLYAcQDmQdeG/exec" + "?sheetNum=" + str(sheetNum)
 	gai = requests.get(url)
 	gaiImage = json.loads(gai.text)
 	gaiMess = gaiImage["image"]
