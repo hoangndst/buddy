@@ -1,7 +1,7 @@
 import discord
 from api import getCovidMess, getWeatherMess, getCatMess, getDogMess, getStandPL, getGaisImage, getFunImage, Addfilm
 from regex import sayhi, bodyshaming, ny, covid, weather, cat, alive, badWord, dog, plstand, anhgai, old, game, film, learn, fun, getAllNumber
-from server import activate
+#from server import activate
 client = discord.Client()
 @client.event
 async def on_ready():
@@ -97,5 +97,5 @@ async def on_message(message):
         msg = Addfilm(3, 0)
         await message.channel.send(msg)
 
-activate()
+#activate()
 client.run('ODc3NTQxMDM1NDkwODIwMTQ4.YR0Hxg.snocV1aD3HJ1a-rWOPUg6w_hiTI')
