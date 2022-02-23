@@ -69,13 +69,13 @@ async def on_message(message):
     if match_11:
         await message.channel.send('Bug cũ rồi bro ạ 🙃')
     if match_12:
-        # await message.channel.send('@everyone' + ' gảm thôi các người anh em 🤩 📢')
-        await message.channel.send('Bỏ gảm đi nghiện quá 😒')
+        await message.channel.send('@everyone' + ' gảm thôi các người anh em 🤩 📢')
+        # await message.channel.send('Bỏ gảm đi nghiện quá 😒')
     if match_13:
         await message.channel.send('@everyone' + ' phim thôi các người anh em 🤩 📢')
     if match_14:
-        await message.channel.send('Learn or lủng 😏')
-        # await message.channel.send('Bỏ học gảm thôi các người anh em 🎮 😋')
+        # await message.channel.send('Learn or lủng 😏')
+        await message.channel.send('Bỏ học gảm thôi các người anh em 🎮 😋')
     if match_15:
         funImg = getFunImage()
         await message.channel.send(funImg)
