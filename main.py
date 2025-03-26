@@ -95,11 +95,6 @@ async def main():
     # Here we have a web client and a database pool, both of which do cleanup at exit.
     # We also have our bot, which depends on both of these.
 
-    # async with ClientSession() as our_client, asyncpg.create_pool(
-    #     dsn='postgresql://hoangnd:Hoang2002*@hoangndst.com:5432/buddy_bot',
-    #     command_timeout=30) as pool:
-        # 2. We become responsible for starting the bot.
-
     exts = ['cogs.general', 'cogs.ai_response', 'cogs.filter']
     intents = discord.Intents.default()
     intents.message_content = True
