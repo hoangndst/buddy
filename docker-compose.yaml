@@ -1,0 +1,10 @@
+services:
+  buddy:
+    container_name: buddy
+    image: hoangndst/buddy:v0.1.0-alpha1
+    environment:
+      - DISCORD_TOKEN=''
+      - GEMINI_API_KEY=''
+      - GEMINI_MODEL=gemini-2.0-flash-thinking-exp-01-21
+    volumes:
+      - ./assets:/app/assets

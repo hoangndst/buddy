@@ -1,101 +1,117 @@
+import asyncio
+import logging
+import logging.handlers
+import os
+
+from typing import List, Optional
+
+import asyncpg
 import discord
-from api import getCovidMess, getWeatherMess, getCatMess, getDogMess, getStandPL, getGaisImage, getFunImage, Addfilm
-from regex import sayhi, bodyshaming, ny, covid, weather, cat, alive, badWord, dog, plstand, anhgai, old, game, film, learn, fun, getAllNumber
-#from server import activate
-client = discord.Client()
-@client.event
-async def on_ready():
-    print('Logged in as {0.user}'.format(client))
+from discord.ext import commands
+from aiohttp import ClientSession
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    match = sayhi.search(message.content)
-    match_1 = bodyshaming.search(message.content)
-    match_2 = ny.search(message.content)
-    match_3 = badWord.search(message.content)
-    match_4 = covid.search(message.content)
-    match_5 = weather.search(message.content)
-    match_6 = cat.search(message.content)
-    match_7 = alive.search(message.content)
-    match_8 = dog.search(message.content)
-    match_9 = plstand.search(message.content)
-    match_10 = anhgai.search(message.content)
-    match_11 = old.search(message.content)
-    match_12 = game.search(message.content)
-    match_13 = film.search(message.content)
-    match_14 = learn.search(message.content)
-    match_15 = fun.search(message.content)
-    if match:
-        content = 'Xin chào ' + message.author.name + '!\n~ Chúc mọi điều tốt lành sẽ đến với bạn!\n'
-        content += 'Buddy Film Extension:\n'
-        content += '`$fView`: Xem số lượng phim đã xem.\n'
-        content += '`$fAdd [Số lượng]`: Thêm hoặc bớt số lượng phim đã xem.\n'
-        content += '`$fFix [Số lượng]`: Sửa số lượng phim đã xem.\n'
-        content += '\nTính năng vẫn đang phát triển các homie đợi nhóe :3!'
-        await message.channel.send(content)
-    elif match_2:
-        await message.channel.send('ny cc')
-    elif match_1:
-        await message.channel.send('Đừng body shaming bạn eii!')
-    if match_3:
-        await message.channel.send('Ngôn từ vô văn hóa')
-    if match_4:
-        covid_mess = getCovidMess()
-        await message.channel.send(covid_mess)
-    if match_5:
-        weather_mess = getWeatherMess()
-        await message.channel.send(weather_mess)
-    if match_6:
-        cat_mess = getCatMess()
-        await message.channel.send(cat_mess)
-    if match_7:
-        await message.channel.send('Vẫn còn thở bro ạ 🙃')
-    if match_8:
-        dog_mess = getDogMess()
-        await message.channel.send(dog_mess)
-    if match_9:
-        stand_mess = getStandPL()
-        await message.channel.send(stand_mess)
-    if match_10:
-        if message.author.id == 493052410713866240:
-            await message.channel.send('Kim Da-mi chứ gì Long, đợi tí :))')
-            gaiMess = getGaisImage(4)
-            await message.channel.send(gaiMess)
-        else:
-            gaiMess = getGaisImage(1)
-            await message.channel.send(gaiMess)
-    if match_11:
-        await message.channel.send('Bug cũ rồi bro ạ 🙃')
-    if match_12:
-        await message.channel.send('@everyone' + ' gảm thôi các người anh em 🤩 📢')
-        # await message.channel.send('Bỏ gảm đi nghiện quá 😒')
-    if match_13:
-        await message.channel.send('@everyone' + ' phim thôi các người anh em 🤩 📢')
-    if match_14:
-        # await message.channel.send('Learn or lủng 😏')
-        await message.channel.send('Bỏ học gảm thôi các người anh em 🎮 😋')
-    if match_15:
-        funImg = getFunImage()
-        await message.channel.send(funImg)
-    if message.content.startswith('$fAdd'):
-        num = getAllNumber(message.content)
-        if len(num) == 1:
-            msg = Addfilm(1, num[0])
-            await message.channel.send(msg)
-        else:
-            await message.channel.send('Sai cú pháp rồi bro, Buddy đ đủ thông minh để hiểu 😒')
-    if message.content.startswith('$fFix'):
-        num = getAllNumber(message.content)
-        if len(num) == 1:
-            msg = Addfilm(2, num[0])
-            await message.channel.send(msg)
-        else:
-            await message.channel.send('Sai cú pháp rồi bro, Buddy đ đủ thông minh để hiểu 😒')
-    if message.content.startswith('$fView'):
-        msg = Addfilm(3, 0)
-        await message.channel.send(msg)
 
-#activate()
-client.run('ODc3NTQxMDM1NDkwODIwMTQ4.YR0Hxg.snocV1aD3HJ1a-rWOPUg6w_hiTI')
+class BuddyBot(commands.Bot):
+    def __init__(
+        self,
+        *args,
+        initial_extensions: List[str],
+        # db_pool: asyncpg.Pool,
+        # web_client: ClientSession,
+        testing_guild_id: Optional[int] = None,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+        # self.db_pool = db_pool
+        # self.web_client = web_client
+        self.testing_guild_id = testing_guild_id
+        self.initial_extensions = initial_extensions
+    
+    async def on_command_error(self, context, exception):
+        if isinstance(exception, commands.CommandNotFound):
+            ai_response_cog = self.get_cog('AIResponse')
+            if ai_response_cog:
+                await ai_response_cog.on_message(context.message)
+        else:
+            await super().on_command_error(context, exception)
+
+    async def setup_hook(self) -> None:
+
+        # here, we are loading extensions prior to sync to ensure we are syncing interactions defined in those extensions.
+
+        for extension in self.initial_extensions:
+            await self.load_extension(extension)
+
+        # In overriding setup hook,
+        # we can do things that require a bot prior to starting to process events from the websocket.
+        # In this case, we are using this to ensure that once we are connected, we sync for the testing guild.
+        # You should not do this for every guild or for global sync, those should only be synced when changes happen.
+        if self.testing_guild_id:
+            guild = discord.Object(self.testing_guild_id)
+            # We'll copy in the global commands to test with:
+            self.tree.copy_global_to(guild=guild)
+            # followed by syncing to the testing guild.
+            await self.tree.sync(guild=guild)
+
+        # This would also be a good place to connect to our database and
+        # load anything that should be in memory prior to handling events.
+
+
+async def main():
+
+    # When taking over how the bot process is run, you become responsible for a few additional things.
+
+    # 1. logging
+
+    # for this example, we're going to set up a rotating file logger.
+    # for more info on setting up logging,
+    # see https://discordpy.readthedocs.io/en/latest/logging.html and https://docs.python.org/3/howto/logging.html
+
+    logger = logging.getLogger('discord')
+    logger.setLevel(logging.INFO)
+
+    handler = logging.handlers.RotatingFileHandler(
+        filename='discord.log',
+        encoding='utf-8',
+        maxBytes=32 * 1024 * 1024,  # 32 MiB
+        backupCount=5,  # Rotate through 5 files
+    )
+    dt_fmt = '%Y-%m-%d %H:%M:%S'
+    formatter = logging.Formatter('[{asctime}] [{levelname:<8}] {name}: {message}', dt_fmt, style='{')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    # console logging
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+
+    # Alternatively, you could use:
+    # discord.utils.setup_logging(handler=handler, root=False)
+
+    # One of the reasons to take over more of the process though
+    # is to ensure use with other libraries or tools which also require their own cleanup.
+
+    # Here we have a web client and a database pool, both of which do cleanup at exit.
+    # We also have our bot, which depends on both of these.
+
+    # async with ClientSession() as our_client, asyncpg.create_pool(
+    #     dsn='postgresql://hoangnd:Hoang2002*@hoangndst.com:5432/buddy_bot',
+    #     command_timeout=30) as pool:
+        # 2. We become responsible for starting the bot.
+
+    exts = ['cogs.general', 'cogs.ai_response', 'cogs.filter']
+    intents = discord.Intents.default()
+    intents.message_content = True
+    async with BuddyBot(
+        commands.when_mentioned,
+        # db_pool=pool,
+        # web_client=our_client,
+        initial_extensions=exts,
+        intents=intents,
+    ) as bot:
+        await bot.start(os.environ.get("DISCORD_TOKEN"))
+
+
+# For most use cases, after defining what needs to run, we can just tell asyncio to run it:
+asyncio.run(main())
