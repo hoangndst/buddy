@@ -5,10 +5,8 @@ import os
 
 from typing import List, Optional
 
-import asyncpg
 import discord
 from discord.ext import commands
-from aiohttp import ClientSession
 
 
 class BuddyBot(commands.Bot):
@@ -26,10 +24,10 @@ class BuddyBot(commands.Bot):
         # self.web_client = web_client
         self.testing_guild_id = testing_guild_id
         self.initial_extensions = initial_extensions
-    
+
     async def on_command_error(self, context, exception):
         if isinstance(exception, commands.CommandNotFound):
-            ai_response_cog = self.get_cog('AIResponse')
+            ai_response_cog = self.get_cog("AIResponse")
             if ai_response_cog:
                 await ai_response_cog.on_message(context.message)
         else:
@@ -41,6 +39,19 @@ class BuddyBot(commands.Bot):
 
         for extension in self.initial_extensions:
             await self.load_extension(extension)
+
+        # Add persistent views to survive bot restarts
+        from cogs.menu import MenuView, AIView, HelpView
+        from cogs.football.buttons import FootballOptionsView, StandingsLeaguesView
+        from cogs.sieu_nhan.buttons import SuperheroView
+        
+        # Register persistent views
+        self.add_view(MenuView(self))
+        self.add_view(FootballOptionsView())
+        self.add_view(StandingsLeaguesView())
+        self.add_view(AIView())
+        self.add_view(HelpView())
+        self.add_view(SuperheroView())
 
         # In overriding setup hook,
         # we can do things that require a bot prior to starting to process events from the websocket.
@@ -59,25 +70,29 @@ class BuddyBot(commands.Bot):
 
 async def main():
 
-    # When taking over how the bot process is run, you become responsible for a few additional things.
+    # When taking over how the bot process is run,
+    # you become responsible for a few additional things.
 
     # 1. logging
 
     # for this example, we're going to set up a rotating file logger.
     # for more info on setting up logging,
-    # see https://discordpy.readthedocs.io/en/latest/logging.html and https://docs.python.org/3/howto/logging.html
+    # see https://discordpy.readthedocs.io/en/latest/logging.html
+    # and https://docs.python.org/3/howto/logging.html
 
-    logger = logging.getLogger('discord')
+    logger = logging.getLogger("discord")
     logger.setLevel(logging.INFO)
 
     handler = logging.handlers.RotatingFileHandler(
-        filename='discord.log',
-        encoding='utf-8',
+        filename="discord.log",
+        encoding="utf-8",
         maxBytes=32 * 1024 * 1024,  # 32 MiB
         backupCount=5,  # Rotate through 5 files
     )
-    dt_fmt = '%Y-%m-%d %H:%M:%S'
-    formatter = logging.Formatter('[{asctime}] [{levelname:<8}] {name}: {message}', dt_fmt, style='{')
+    dt_fmt = "%Y-%m-%d %H:%M:%S"
+    formatter = logging.Formatter(
+        "[{asctime}] [{levelname:<8}] {name}: {message}", dt_fmt, style="{"
+    )
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
@@ -95,11 +110,11 @@ async def main():
     # Here we have a web client and a database pool, both of which do cleanup at exit.
     # We also have our bot, which depends on both of these.
 
-    exts = ['cogs.general', 'cogs.ai_response', 'cogs.filter']
+    exts = ["cogs.ai_response", "cogs.menu", "cogs.sieu_nhan"]
     intents = discord.Intents.default()
     intents.message_content = True
     async with BuddyBot(
-        commands.when_mentioned,
+        commands.when_mentioned_or('$'),
         # db_pool=pool,
         # web_client=our_client,
         initial_extensions=exts,
