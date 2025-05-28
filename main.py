@@ -44,7 +44,7 @@ class BuddyBot(commands.Bot):
         from cogs.menu import MenuView, AIView, HelpView
         from cogs.football.buttons import FootballOptionsView, StandingsLeaguesView
         from cogs.sieu_nhan.buttons import SuperheroView
-        
+
         # Register persistent views
         self.add_view(MenuView(self))
         self.add_view(FootballOptionsView())
@@ -114,7 +114,7 @@ async def main():
     intents = discord.Intents.default()
     intents.message_content = True
     async with BuddyBot(
-        commands.when_mentioned_or('$'),
+        commands.when_mentioned_or("$"),
         # db_pool=pool,
         # web_client=our_client,
         initial_extensions=exts,

@@ -3,6 +3,7 @@ from google.genai import types
 import os
 from discord.ext import commands
 
+
 class AIResponse(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -15,12 +16,16 @@ class AIResponse(commands.Cog):
         # Check if the bot is mentioned
         if self.bot.user.mentioned_in(message):
             try:
-                content_without_mention = message.content.replace(f'<@{self.bot.user.id}>', '').strip()
+                content_without_mention = message.content.replace(
+                    f"<@{self.bot.user.id}>", ""
+                ).strip()
                 contents = [
                     types.Content(
                         role="user",
                         parts=[
-                            types.Part.from_text(text="""{}""".format(content_without_mention))
+                            types.Part.from_text(
+                                text="""{}""".format(content_without_mention)
+                            )
                         ],
                     ),
                 ]
@@ -49,8 +54,11 @@ class AIResponse(commands.Cog):
                 if response:
                     await message.channel.send(response)
             except Exception as e:
-                await message.channel.send(f"Thực sự xin lỗi, tôi không hiểu ý của bạn :cry:")
+                await message.channel.send(
+                    f"Thực sự xin lỗi, tôi không hiểu ý của bạn :cry:"
+                )
                 raise e
+
 
 async def setup(bot):
     await bot.add_cog(AIResponse(bot))
