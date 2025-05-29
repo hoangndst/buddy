@@ -19,7 +19,7 @@ jobs:
       - task: UsePythonVersion@0
         displayName: 'Use Python $(PYTHON_VERSION)'
         inputs:
-          versionSpec: $(PYTHON_VERSION)
+          versionSpec: '$(PYTHON_VERSION).x'
 
       - script: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
