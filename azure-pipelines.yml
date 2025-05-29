@@ -5,7 +5,7 @@ pool:
   name: mr4x2-pool
 
 jobs:
-  - job: install-dependencies
+  - job: install_dependencies
     steps:
       - task: Bash@3
         displayName: 'Read Python version from .python-version'
@@ -29,8 +29,8 @@ jobs:
           uv sync --all-extras --dev
         displayName: 'Install dependencies'
 
-  - job: test
-    dependsOn: install-dependencies
+  - job: run_tests
+    dependsOn: install_dependencies
     steps:
       - script: |
           python -m test
