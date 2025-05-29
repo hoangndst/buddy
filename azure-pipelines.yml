@@ -4,22 +4,18 @@ trigger:
 pool:
   name: mr4x2-pool
 
+variables:
+  python_version: '3.13.3'
+
 jobs:
   - job: install_dependencies
     steps:
-      - task: Bash@3
-        displayName: 'Read Python version from .python-version'
-        inputs:
-          targetType: 'inline'
-          script: |
-            PYTHON_VERSION=$(cat .python-version | tr -d '\n')
-            echo "Python version: $PYTHON_VERSION"
-            echo "##vso[task.setvariable variable=PYTHON_VERSION]$PYTHON_VERSION"
       
       - task: UsePythonVersion@0
-        displayName: 'Use Python $(PYTHON_VERSION)'
+        displayName: 'Use Python $(python_version)'
         inputs:
-          versionSpec: '$(PYTHON_VERSION).x'
+          versionSpec: '$(python_version)'
+          architecture: 'x64'
 
       - script: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
