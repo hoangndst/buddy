@@ -4,11 +4,34 @@ trigger:
 pool:
   name: mr4x2-pool
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+jobs:
+  - job: install-dependencies
+    steps:
+      - task: Bash@3
+        displayName: 'Read Python version from .python-version'
+        inputs:
+          targetType: 'inline'
+          script: |
+            PYTHON_VERSION=$(cat .python-version | tr -d '\n')
+            echo "Python version: $PYTHON_VERSION"
+            echo "##vso[task.setvariable variable=PYTHON_VERSION]$PYTHON_VERSION"
+      
+      - task: UsePythonVersion@0
+        displayName: 'Use Python $(PYTHON_VERSION)'
+        inputs:
+          versionSpec: $(PYTHON_VERSION)
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+      - script: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+        displayName: 'Install uv'
+
+      - script: |
+          uv sync --all-extras --dev
+        displayName: 'Install dependencies'
+
+  - job: test
+    dependsOn: install-dependencies
+    steps:
+      - script: |
+          python -m test
+        displayName: 'Run tests'
