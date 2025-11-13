@@ -4,19 +4,10 @@ trigger:
 pool:
   name: mr4x2-pool
 
-variables:
-  python_version: '3.13'
-
 jobs:
   - job: lint
     displayName: 'Run linters'
     steps:
-      - task: UsePythonVersion@0
-        displayName: 'Use Python $(python_version)'
-        inputs:
-          versionSpec: '$(python_version)'
-          architecture: 'x64'
-
       - script: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
         displayName: 'Install uv'
@@ -33,12 +24,6 @@ jobs:
     displayName: 'Run unit tests'
     dependsOn: lint
     steps:
-      - task: UsePythonVersion@0
-        displayName: 'Use Python $(python_version)'
-        inputs:
-          versionSpec: '$(python_version)'
-          architecture: 'x64'
-
       - script: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
         displayName: 'Install uv'
