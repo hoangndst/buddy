@@ -10,13 +10,17 @@ jobs:
     steps:
       - script: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
+          export PATH="$HOME/.local/bin:$PATH"
+          uv --version
         displayName: 'Install uv'
 
       - script: |
+          export PATH="$HOME/.local/bin:$PATH"
           uv sync --all-extras --dev
         displayName: 'Install dependencies'
 
       - script: |
+          export PATH="$HOME/.local/bin:$PATH"
           uv run black --check .
         displayName: 'Black format check'
 
@@ -26,12 +30,16 @@ jobs:
     steps:
       - script: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
+          export PATH="$HOME/.local/bin:$PATH"
+          uv --version
         displayName: 'Install uv'
 
       - script: |
+          export PATH="$HOME/.local/bin:$PATH"
           uv sync --all-extras --dev
         displayName: 'Install dependencies'
 
       - script: |
+          export PATH="$HOME/.local/bin:$PATH"
           uv run python -m unittest discover tests
         displayName: 'Run tests'
