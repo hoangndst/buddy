@@ -124,4 +124,5 @@ async def main():
 
 
 # For most use cases, after defining what needs to run, we can just tell asyncio to run it:
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())

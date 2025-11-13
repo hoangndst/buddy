@@ -8,9 +8,9 @@ variables:
   python_version: '3.13.3'
 
 jobs:
-  - job: install_dependencies
+  - job: lint
+    displayName: 'Run linters'
     steps:
-      
       - task: UsePythonVersion@0
         displayName: 'Use Python $(python_version)'
         inputs:
@@ -25,9 +25,28 @@ jobs:
           uv sync --all-extras --dev
         displayName: 'Install dependencies'
 
-  - job: run_tests
-    dependsOn: install_dependencies
-    steps:
       - script: |
-          python -m test
+          uv run black --check .
+        displayName: 'Black format check'
+
+  - job: run_tests
+    displayName: 'Run unit tests'
+    dependsOn: lint
+    steps:
+      - task: UsePythonVersion@0
+        displayName: 'Use Python $(python_version)'
+        inputs:
+          versionSpec: '$(python_version)'
+          architecture: 'x64'
+
+      - script: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+        displayName: 'Install uv'
+
+      - script: |
+          uv sync --all-extras --dev
+        displayName: 'Install dependencies'
+
+      - script: |
+          uv run python -m unittest discover tests
         displayName: 'Run tests'
